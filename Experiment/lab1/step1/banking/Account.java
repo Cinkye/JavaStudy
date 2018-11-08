@@ -1,10 +1,11 @@
+package banking;
 import java.util.*;
 
 public class Account
 {
 	private double balance;
 	
-	Account(double init_balance)
+	public Account(double init_balance)
 	{
 		balance = init_balance;
 	}

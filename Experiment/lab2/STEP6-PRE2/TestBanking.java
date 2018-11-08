@@ -4,8 +4,8 @@
  * and generates a report of current account balances.
  */
 
-//import banking.domain.*;
-//import banking.reports.CustomerReport;
+import banking.domain.*;
+import banking.reports.CustomerReport;
 
 public class TestBanking {
 

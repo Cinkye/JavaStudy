@@ -1,6 +1,5 @@
+package banking;
 import java.util.*;
-
-import javax.security.auth.login.AccountException;
 
 public class Customer 
 {
@@ -24,16 +23,6 @@ public class Customer
 	{
 		return lastName;
 	}
-	
-	public void setAccount(Account acct)
-	{
-		account = acct;
-	}
-	
-	public Account getAccount()
-	{
-		return account;
-	}
 
 	public void addAccount(Account ac)
 	{
@@ -42,7 +31,7 @@ public class Customer
 
 	public Account getAccount(int i)
 	{
-		return list.get(i);
+		return (Account)list.get(i);
 	}
 
 	public int getNumOfAccounts()

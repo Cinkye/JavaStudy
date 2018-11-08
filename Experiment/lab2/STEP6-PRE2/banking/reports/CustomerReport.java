@@ -1,6 +1,6 @@
-//package banking.reports;
+package banking.reports;
 
-//import banking.domain.*;
+import banking.domain.*;
 import java.text.NumberFormat;
 
 public class CustomerReport {

@@ -1,10 +1,11 @@
+package banking;
 import java.util.*;
 
 public class Account
 {
 	private double balance;
 	
-	Account(double init_balance)
+	public Account(double init_balance)
 	{
 		balance = init_balance;
 	}
@@ -14,13 +15,19 @@ public class Account
 		return balance;
 	}
 	
-	public void deposit(double amount)
+	public boolean deposit(double amt)
 	{
-		balance += amount;
+		balance += amt;
+		return true;
 	}
 	
-	public void withdraw(double amount)
+	public boolean withdraw(double amt)
 	{
-		balance -= amount;
+		if(balance >= amt)
+		{
+			balance -= amt;
+			return true;
+		}
+		return false;
 	}
 }

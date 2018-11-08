@@ -1,15 +1,10 @@
+package banking;
 import java.util.*;
 
 public class Bank
 {
 	private Customer[] customer;
 	private int numberOfCustomers;
-	
-	public Bank(int numOC)
-	{
-		numberOfCustomers = 0;
-		customer = new Customer[numOC];
-	}
 	
 	public Bank()
 	{
