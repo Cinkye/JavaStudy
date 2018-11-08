@@ -1,3 +1,4 @@
+package banking.domain;
 import java.util.*;
 import java.math.*;
 
@@ -68,13 +69,13 @@ public class Account
 		return true;
 	}
 	
-	public boolean withdraw(double amt)
+	public void withdraw(double amt) throws OverdraftException
 	{
 		if(balance >= amt)
 		{
 			balance -= amt;
-			return true;
 		}
-		return false;
+		else
+			throw new OverdraftException("Insufficient funds",amt-balance);
 	}
 }

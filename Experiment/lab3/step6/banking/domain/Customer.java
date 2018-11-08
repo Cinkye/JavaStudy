@@ -1,3 +1,4 @@
+package banking.domain;
 import java.util.*;
 
 import javax.security.auth.login.AccountException;
@@ -38,5 +39,14 @@ public class Customer
 	public int getNumOfAccounts()
 	{
 		return list.size();
+	}
+	
+	public int compareTo(Customer cus)
+	{
+		int num = lastName.compareTo(cus.getLastName());
+		if(num == 0)
+			return firstName.compareTo(cus.getFirstName());
+		else
+			return num;
 	}
 }

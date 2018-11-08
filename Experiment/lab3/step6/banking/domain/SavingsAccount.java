@@ -1,3 +1,4 @@
+package banking.domain;
 import java.util.*;
 
 public class SavingsAccount extends Account

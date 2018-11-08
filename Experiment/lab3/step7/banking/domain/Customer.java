@@ -1,8 +1,9 @@
+package banking.domain;
 import java.util.*;
 
 import javax.security.auth.login.AccountException;
 
-public class Customer inplements Comparable
+public class Customer 
 {
 	private ArrayList list;
 	private String lastName;
@@ -12,7 +13,7 @@ public class Customer inplements Comparable
 	{
 		lastName = l;
 		firstName = f;
-        list = new ArrayList();
+                                   list = new ArrayList();
 	}
 	
 	public String getFirstName()
@@ -42,6 +43,10 @@ public class Customer inplements Comparable
 	
 	public int compareTo(Customer cus)
 	{
-		return firstName.compareTo(cus.getFirstName());
+		int num = lastName.compareTo(cus.getLastName());
+		if(num == 0)
+			return firstName.compareTo(cus.getFirstName());
+		else
+			return num;
 	}
 }

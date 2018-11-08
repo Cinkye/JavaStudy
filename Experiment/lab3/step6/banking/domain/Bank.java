@@ -1,3 +1,4 @@
+package banking.domain;
 import java.util.*;
 
 public class Bank
@@ -31,5 +32,17 @@ public class Bank
 	public Customer getCustomer(int index)
 	{
 		return customer[index];
+	}
+	
+	public void sortCustomers()
+	{
+		for(int i = 0;i < numberOfCustomers;++i)
+			for(int j = i;j > 0;--j)
+				if(customer[j].compareTo(customer[j-1]) < 0)
+				{
+					Customer tmp = customer[j];
+					customer[j] = customer[j-1];
+					customer[j-1] = tmp;
+				}
 	}
 }

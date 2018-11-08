@@ -1,6 +1,6 @@
-//package banking.reports;
+package banking.reports;
 
-//import banking.domain.*;
+import banking.domain.*;
 import java.text.NumberFormat;
 
 public class CustomerReport {
@@ -11,7 +11,7 @@ public class CustomerReport {
     Bank         bank = Bank.getBank();
 
     Customer     customer;
-
+    bank.sortCustomers();
     System.out.println("\t\t\tCUSTOMERS REPORT");
     System.out.println("\t\t\t================");
 

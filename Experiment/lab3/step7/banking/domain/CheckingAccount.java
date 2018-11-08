@@ -1,3 +1,4 @@
+package banking.domain;
 import java.util.*;
 
 public class CheckingAccount extends Account
@@ -15,21 +16,25 @@ public class CheckingAccount extends Account
 		overdraftProtection = protect;
 	}
 	
-	public boolean withdraw(double amt)
+	public void withdraw(double amt) throws OverdraftException
 	{
 		if(balance >= amt)
 		{
 			super.withdraw(amt);
-			return true;
 		}
 		else if(balance + overdraftProtection >= amt)
 		{
-			balance = 0;
 			overdraftProtection = balance + overdraftProtection - amt;
-			return true;
+			double tmp = balance;
+			balance = 0;
+			throw new OverdraftException("Insufficient funds for overdraft protection",amt-tmp);
 		}
 		else
-			return false;
+		{
+			double tmp = balance;
+			balance = 0;
+			throw new OverdraftException("Insufficient funds for overdraft protection",amt-tmp-overdraftProtection);
+		}
 	}
 	public double getOverdraftProtection()
 	{

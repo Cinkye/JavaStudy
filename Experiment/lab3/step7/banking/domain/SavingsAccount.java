@@ -1,3 +1,4 @@
+package banking.domain;
 import java.util.*;
 
 public class SavingsAccount extends Account
@@ -9,5 +10,15 @@ public class SavingsAccount extends Account
 	{
 		super(1,balance);
 		interestRate = interest_rate;
+	}
+	
+	public void withdraw(double amt) throws OverdraftException
+	{
+		if(balance >= amt)
+		{
+			balance -= amt;
+		}
+		else
+			throw new OverdraftException("No overdraft protection",amt);
 	}
 }
