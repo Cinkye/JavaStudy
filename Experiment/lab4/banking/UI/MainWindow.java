@@ -11,7 +11,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import java.io.*;
-import javafx.application.*;
 
 public class MainWindow extends JFrame
 {
@@ -203,7 +202,8 @@ public class MainWindow extends JFrame
 					jlCustomer.setSelectedIndex(index);
 			}
 		});
-
+		
+		// Cinkye 201730684427
 		// Functions of the buttom sort
 		jbtSort.addActionListener(new ActionListener()
 		{
@@ -233,6 +233,8 @@ public class MainWindow extends JFrame
 			
 	}
 
+	// ------------------------------- End of functions of the buttons and the list -------------------------------
+	// Cinkye 201730684427
 	/** Write a record at the end of the file */
 	public void writeCustomer()
 	{

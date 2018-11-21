@@ -10,7 +10,7 @@ public class Bank
 	public Bank()
 	{
 		numberOfCustomers = 0;
-		customer = new Customer[5];
+		customer = new Customer[20];
 	}
 
 	public static Bank getBank()
