@@ -52,4 +52,12 @@ public class Bank
 					customer[j-1] = tmp;
 				}
 	}
+	
+	public int searchCustomers(String fn,String ln)
+	{
+		for(int i = 0;i < numberOfCustomers;++i)
+			if(fn.equals(customer[i].getFirstName()) && ln.equals(customer[i].getLastName()))
+				return i;
+		return -1;
+	}
 }
