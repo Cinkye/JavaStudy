@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Bank
 {
-	private Customer[] customer;
+	public Customer[] customer;
 	private int numberOfCustomers;
 	public static Bank bankInstance = new Bank();
 
@@ -22,6 +22,13 @@ public class Bank
 	{
 		customer[numberOfCustomers] = new Customer(f,l);
 		numberOfCustomers++;
+	}
+	
+	public void removeCustomer(int index)
+	{
+		for(int i = index;i < numberOfCustomers;++i)
+			customer[i] = customer[i+1];
+		numberOfCustomers--;
 	}
 	
 	public int getNumOfCustomers()

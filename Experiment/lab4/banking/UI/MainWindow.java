@@ -1,8 +1,14 @@
 package banking.UI;
 import java.awt.*;
+import banking.DAO.*;
+import banking.domain.*;
+
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import java.io.*;
 import javafx.application.*;
 
@@ -11,6 +17,7 @@ public class MainWindow extends JFrame
 	// Specify the size of five string fields in the record
 	final static int FIRST_NAME_SIZE = 20;
 	final static int LAST_NAME_SIZE = 20;
+	final static int RECORD_SIZE = (FIRST_NAME_SIZE + LAST_NAME_SIZE);
 	
 	// Access address.dat using RandomAccessFile
 	private RandomAccessFile raf;
@@ -22,11 +29,13 @@ public class MainWindow extends JFrame
 	// Buttons
 	private JButton jbtAdd = new JButton("ADD");
 	private JButton jbtDelete = new JButton("DEL");
-	private JButton jbtSearch = new JButton("SEARCH");
-	private JButton jbtSort = new JButton("Sort");
+	private JButton jbtSearch = new JButton("PREV");
+	private JButton jbtSort = new JButton("SORT");
 
 	// Customer Lists
-	private JList jlCustomer = new JList();
+	private DefaultListModel model = new DefaultListModel();
+	private JList jlCustomer = new JList(model);
+	
 	
 	public MainWindow() 
 	{
@@ -75,21 +84,6 @@ public class MainWindow extends JFrame
 		p2.add(new JPanel());
 		p2.add(jpLastName);
 		
-		/*
-		
-		
-		
-		
-		
-		// Place p1 and p4 into jpAddress
-		JPanel jpAddress = new JPanel(new BorderLayout());
-		jpAddress.add(p1, BorderLayout.WEST);
-		jpAddress.add(p2, BorderLayout.CENTER);
-		*/
-				
-		// Set the panel with line border
-		//jpAddress.setBorder(new BevelBorder(BevelBorder.RAISED));
-		
 		// Add buttons to a panel
 		JPanel jpButton = new JPanel();
 		jpButton.add(jbtAdd);
@@ -103,33 +97,69 @@ public class MainWindow extends JFrame
 		p3.add(p2);
 		p3.add(jpButton);
 				
+		// Set the panel with line border
+		combined.setBorder(new BevelBorder(BevelBorder.RAISED));
+		p3.setBorder(new BevelBorder(BevelBorder.RAISED));
+				
 		// Add jpAddress and jpButton to the frame
 		add(combined, BorderLayout.WEST);
 		add(p3, BorderLayout.EAST);
-	}
-		/*
+		
+		// Add customers to jlCustomer
+		Bank bank = Bank.getBank();
+		for(int i = 0;i < bank.getNumOfCustomers();++i)
+		{
+			model.addElement(bank.getCustomer(i).getFirstName() + " " + bank.getCustomer(i).getLastName());
+		}
+		
+		
 		jbtAdd.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				writeAddress();
+				writeCustomer();
+				bank.addCustomer(jtfFirstName.getText(),jtfLastName.getText());
+				String fn = jtfFirstName.getText().replaceAll(" ", "");
+				String ln = jtfLastName.getText().replaceAll(" ", "");
+				model.addElement(fn + " " + ln);
 			}
 		});
-		jbtFirst.addActionListener(new ActionListener()
+		
+		jlCustomer.addListSelectionListener(new ListSelectionListener()
 		{
-			public void actionPerformed(ActionEvent e)
+			
+			public void valueChanged(ListSelectionEvent e)
 			{
 				try
 				{
-					if (raf.length() > 0)
-						readAddress(0);
+					readCustomer(jlCustomer.getSelectedIndex() * RECORD_SIZE * 2);
 				} catch (IOException ex)
 				{
 					ex.printStackTrace();
 				}
 			}
 		});
-		jbtNext.addActionListener(new ActionListener()
+		
+		jbtDelete.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				bank.removeCustomer(jlCustomer.getSelectedIndex());
+				model.removeAllElements();
+				for(int i = 0;i < bank.getNumOfCustomers();++i)
+					model.addElement(bank.getCustomer(i).getFirstName() + " " + bank.getCustomer(i).getLastName());
+				try
+				{
+					if (raf.length() > 0)
+						readCustomer(0);
+				} catch (IOException ex)
+				{
+					ex.printStackTrace();
+				}
+			}
+		});
+		
+		jbtSearch.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -137,14 +167,15 @@ public class MainWindow extends JFrame
 				{
 					long currentPosition = raf.getFilePointer();
 					if (currentPosition < raf.length())
-						readAddress(currentPosition);
+						readCustomer(currentPosition);
 				} catch (IOException ex)
 				{
 					ex.printStackTrace();
 				}
 			}
 		});
-		jbtPrevious.addActionListener(new ActionListener()
+		
+		jbtSort.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -153,25 +184,9 @@ public class MainWindow extends JFrame
 					long currentPosition = raf.getFilePointer();
 					if (currentPosition - 2 * RECORD_SIZE > 0)
 						// Why 2 * 2 * RECORD_SIZE? See the follow-up remarks
-						readAddress(currentPosition - 2 * 2 * RECORD_SIZE);
+						readCustomer(currentPosition - 2 * 2 * RECORD_SIZE);
 					else
-						readAddress(0);
-				} catch (IOException ex)
-				{
-					ex.printStackTrace();
-				}
-			}
-		});
-		jbtLast.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				try
-				{
-					long lastPosition = raf.length();
-					if (lastPosition > 0)
-						// Why 2 * RECORD_SIZE? See the follow-up remarks
-						readAddress(lastPosition - 2 * RECORD_SIZE);
+						readCustomer(0);
 				} catch (IOException ex)
 				{
 					ex.printStackTrace();
@@ -183,46 +198,37 @@ public class MainWindow extends JFrame
 		try
 		{
 			if (raf.length() > 0)
-				readAddress(0);
+				readCustomer(0);
 		} catch (IOException ex)
 		{
 			ex.printStackTrace();
 		}
 	}
 
-	*//** Write a record at the end of the file *//*
-	public void writeAddress()
+	/** Write a record at the end of the file */
+	public void writeCustomer()
 	{
 		try
 		{
 			raf.seek(raf.length());
-			FixedLengthStringIO.writeFixedLengthString(jtfName.getText(), NAME_SIZE, raf);
-			FixedLengthStringIO.writeFixedLengthString(jtfStreet.getText(), STREET_SIZE, raf);
-			FixedLengthStringIO.writeFixedLengthString(jtfCity.getText(), CITY_SIZE, raf);
-			FixedLengthStringIO.writeFixedLengthString(jtfState.getText(), STATE_SIZE, raf);
-			FixedLengthStringIO.writeFixedLengthString(jtfZip.getText(), ZIP_SIZE, raf);
+			FixedLengthStringIO.writeFixedLengthString(jtfFirstName.getText(), FIRST_NAME_SIZE, raf);
+			FixedLengthStringIO.writeFixedLengthString(jtfLastName.getText(), LAST_NAME_SIZE, raf);
 		} catch (IOException ex)
 		{
 			ex.printStackTrace();
 		}
 	}
 
-	*//** Read a record at the specified position *//*
-	public void readAddress(long position) throws IOException
+	/** Read a record at the specified position */
+	public void readCustomer(long position) throws IOException
 	{
 		raf.seek(position);
-		String name = FixedLengthStringIO.readFixedLengthString(NAME_SIZE, raf);
-		String street = FixedLengthStringIO.readFixedLengthString(STREET_SIZE, raf);
-		String city = FixedLengthStringIO.readFixedLengthString(CITY_SIZE, raf);
-		String state = FixedLengthStringIO.readFixedLengthString(STATE_SIZE, raf);
-		String zip = FixedLengthStringIO.readFixedLengthString(ZIP_SIZE, raf);
+		String FirstName = FixedLengthStringIO.readFixedLengthString(FIRST_NAME_SIZE, raf);
+		String LastName = FixedLengthStringIO.readFixedLengthString(LAST_NAME_SIZE, raf);
 
-		jtfName.setText(name);
-		jtfStreet.setText(street);
-		jtfCity.setText(city);
-		jtfState.setText(state);
-		jtfZip.setText(zip);
-	}*/
+		jtfFirstName.setText(FirstName);
+		jtfLastName.setText(LastName);
+	}
 
 	public static void main(String[] args)
 	{

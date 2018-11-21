@@ -13,7 +13,7 @@ public class Customer
 	{
 		lastName = l;
 		firstName = f;
-                                   list = new ArrayList();
+        list = new ArrayList();
 	}
 	
 	public String getFirstName()

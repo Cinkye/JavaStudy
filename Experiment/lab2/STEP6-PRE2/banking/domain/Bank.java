@@ -7,7 +7,7 @@ public class Bank
 	private int numberOfCustomers;
 	public static Bank bankInstance = new Bank();
 
-	public Bank()
+	private Bank()
 	{
 		numberOfCustomers = 0;
 		customer = new Customer[5];
