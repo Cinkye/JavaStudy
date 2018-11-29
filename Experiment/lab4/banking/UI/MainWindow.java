@@ -1,20 +1,25 @@
 package banking.UI;
 
 import java.awt.*;
+
+import banking.UI.*;
 import banking.DAO.*;
 import banking.domain.*;
 
 import java.awt.event.*;
+import java.awt.image.ImageObserver;
+
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import java.io.*;
+import java.text.AttributedCharacterIterator;
 
 public class MainWindow extends JFrame
 {
-	// Specify the size of five string fields in the record
+	// Specify the size of two string fields in the record
 	final static int FIRST_NAME_SIZE = 20;
 	final static int LAST_NAME_SIZE = 20;
 	final static int RECORD_SIZE = (FIRST_NAME_SIZE + LAST_NAME_SIZE);
@@ -106,6 +111,7 @@ public class MainWindow extends JFrame
 		p3.add(p2);
 		p3.add(jpButton);
 
+
 		// Set the panel with line border
 		combined.setBorder(new BevelBorder(BevelBorder.RAISED));
 		p3.setBorder(new BevelBorder(BevelBorder.RAISED));
@@ -113,6 +119,7 @@ public class MainWindow extends JFrame
 		// Add everything above to the frame
 		add(combined, BorderLayout.WEST);
 		add(p3, BorderLayout.EAST);
+		
 		// ------------------------------- End of putting things together -------------------------------
 		
 		// ------------------------------- Initializing the program -------------------------------
